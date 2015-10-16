@@ -12,6 +12,14 @@
         android:layout_alignParentTop="true"
         android:textSize="18sp" />
 
+    <FrameLayout
+        android:id="@+id/top_fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+    </FrameLayout>
+
     <com.facebook.login.widget.LoginButton
         android:id="@+id/login_button"
         android:layout_width="wrap_content"

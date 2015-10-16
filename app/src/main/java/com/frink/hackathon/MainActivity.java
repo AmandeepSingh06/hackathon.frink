@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.facebook.CallbackManager;
@@ -13,11 +15,13 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.frink.hackathon.fragments.CardListFragment;
 
 public class MainActivity extends AppCompatActivity {
     private TextView info;
     private LoginButton loginButton;
     private CallbackManager callbackManager;
+    private FrameLayout frameLayoutFragmentContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         callbackManager = CallbackManager.Factory.create();
         setContentView(R.layout.activity_main);
         info = (TextView) findViewById(R.id.info);
+        frameLayoutFragmentContainer = (FrameLayout) findViewById(R.id.top_fragment_container);
         loginButton = (LoginButton) findViewById(R.id.login_button);
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -37,6 +42,10 @@ public class MainActivity extends AppCompatActivity {
                                 "Auth Token: "
                                 + loginResult.getAccessToken().getToken()
                 );
+                // Run fragment transaction here
+                frameLayoutFragmentContainer.setVisibility(View.VISIBLE);
+                getFragmentManager().beginTransaction().add(R.id.top_fragment_container, CardListFragment.getInstance()).commit();
+
             }
 
             @Override
