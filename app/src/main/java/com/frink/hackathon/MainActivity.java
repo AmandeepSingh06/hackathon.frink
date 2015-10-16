@@ -15,7 +15,7 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.frink.hackathon.fragments.CardListFragment;
+import com.frink.hackathon.addcardlist.BankCardFragment;
 
 public class MainActivity extends AppCompatActivity {
     private TextView info;
@@ -42,9 +42,13 @@ public class MainActivity extends AppCompatActivity {
                                 "Auth Token: "
                                 + loginResult.getAccessToken().getToken()
                 );
+                if (info.getVisibility() == View.VISIBLE) {
+                    info.setVisibility(View.GONE);
+                    loginButton.setVisibility(View.GONE);
+                }
                 // Run fragment transaction here
                 frameLayoutFragmentContainer.setVisibility(View.VISIBLE);
-                getFragmentManager().beginTransaction().add(R.id.top_fragment_container, CardListFragment.getInstance()).commit();
+                getFragmentManager().beginTransaction().add(R.id.top_fragment_container, BankCardFragment.getInstance()).commit();
 
             }
 
