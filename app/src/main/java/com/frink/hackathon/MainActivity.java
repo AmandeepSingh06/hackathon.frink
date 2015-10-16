@@ -3,21 +3,39 @@ package com.frink.hackathon;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.frink.hackathon.models.UserFBData;
+
+import org.json.JSONObject;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private TextView info;
     private LoginButton loginButton;
     private CallbackManager callbackManager;
+
+    public static final String FACEBOOK_PERMISSION_PUBLIC_PROFILE = "public_profile";
+    public static final String FACEBOOK_PERMISSION_EMAIL = "email";
+    public static final String FACEBOOK_PERMISSION_USER_FRIENDS = "user_friends";
+    public static final String FACEBOOK_PERMISSION_USER_BIRTHDAY = "user_birthday";
+    public static final String FACEBOOK_PERMISSION_USER_EDUCATION_HISTORY
+            = "user_education_history";
+    public static final String FACEBOOK_PERMISSION_USER_WORK_HISTORY = "user_work_history";
+    public static final List<String> PERMISSIONS = Arrays
+            .asList(FACEBOOK_PERMISSION_PUBLIC_PROFILE, FACEBOOK_PERMISSION_EMAIL,
+                    FACEBOOK_PERMISSION_USER_FRIENDS);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,31 +43,55 @@ public class MainActivity extends AppCompatActivity {
         FacebookSdk.sdkInitialize(getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
         setContentView(R.layout.activity_main);
-        info = (TextView) findViewById(R.id.info);
         loginButton = (LoginButton) findViewById(R.id.login_button);
+        loginButton.setReadPermissions(PERMISSIONS);
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                info.setText(
-                        "User ID: "
-                                + loginResult.getAccessToken().getUserId()
-                                + "\n" +
-                                "Auth Token: "
-                                + loginResult.getAccessToken().getToken()
-                );
+                fetchDataFromFacebook(loginResult);
             }
 
             @Override
             public void onCancel() {
-                info.setText("Login attempt canceled.");
             }
 
             @Override
             public void onError(FacebookException e) {
-                info.setText("Login attempt failed.");
             }
         });
     }
+
+    private void fetchDataFromFacebook(final LoginResult loginResult) {
+        final UserFBData fbUser = new UserFBData();
+        GraphRequest request = GraphRequest.newMeRequest(
+                loginResult.getAccessToken(),
+                new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(
+                            JSONObject object,
+                            GraphResponse response) {
+                        Log.v("LoginActivity", response.toString());
+                        fbUser.setName(object.optString("name"));
+                        fbUser.setEmail(object.optString("email"));
+                        fbUser.setId(object.optString("id"));
+                        getFacebookFriendList(fbUser.getId(), loginResult.getAccessToken().getToken());
+
+                    }
+                });
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id,name,email");
+        request.setParameters(parameters);
+        request.executeAsync();
+
+
+    }
+
+    public void getFacebookFriendList(String id, String accessToken) {
+        //facebook getting friend list start
+
+        //facebook getting friend list end
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -76,6 +118,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public String getFacebookFriendListUrl(String id, String accessToken) {
+        String url = null;
+        if (id != null && accessToken != null) {
+            url = "https://graph.facebook.com/v2.3/" + id + "/friends?access_token=" + accessToken;
+        }
+        return url;
     }
 }
 
