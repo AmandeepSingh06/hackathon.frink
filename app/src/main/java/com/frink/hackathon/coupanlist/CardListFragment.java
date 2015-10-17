@@ -1,6 +1,8 @@
 package com.frink.hackathon.coupanlist;
 
 import android.app.ListFragment;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,6 +31,7 @@ public class CardListFragment extends ListFragment {
     CardListModel.CardModel cm = new CardListModel.CardModel(null, null, null, null);
     String userId;
 
+
     static public CardListFragment getInstance(String id) {
         CardListFragment cf = new CardListFragment();
         Bundle b = new Bundle();
@@ -42,7 +45,8 @@ public class CardListFragment extends ListFragment {
         super.onCreate(onSaveInstance);
 
         cl = new CardListAdapater(getActivity(), R.layout.card_list_row, items);
-        JsonTask task = new JsonTask(cl);
+
+        JsonTask task = new JsonTask(getActivity(), cl);
         int i = 0;
         if (getArguments() != null) {
             userId = getArguments().getSerializable("id").toString();
@@ -51,6 +55,7 @@ public class CardListFragment extends ListFragment {
         userid += userId;
         //userid += "912790462141979";
         Log.d("shashwat", "userid is " + userid);
+
         task.execute(userid);
 
     }
@@ -67,9 +72,14 @@ public class CardListFragment extends ListFragment {
     public static class JsonTask extends AsyncTask<String, Void, CardListModel> {
 
         CardListAdapater cardListAdapater;
+        ProgressDialog progressDialogue;
+        Context context;
 
-
-        public JsonTask(CardListAdapater cl) {
+        public JsonTask(Context context, CardListAdapater cl) {
+            progressDialogue = new ProgressDialog(context);
+            progressDialogue.setTitle("Please Wait");
+            progressDialogue.setMessage("Data getting Loaded");
+            progressDialogue.show();
             cardListAdapater = cl;
         }
 
@@ -101,7 +111,7 @@ public class CardListFragment extends ListFragment {
 
         @Override
         public void onPostExecute(CardListModel cl) {
-
+            progressDialogue.dismiss();
             ArrayList<CardListModel.CardModel> cards = cl.getCoupans();
             Iterator<CardListModel.CardModel> ie = cards.iterator();
 

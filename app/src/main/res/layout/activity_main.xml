@@ -5,10 +5,21 @@
     android:gravity="center_horizontal"
     android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_0dp"
-        android:layout_weight="1">
+        android:layout_height="match_parent">
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/login_button"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_alignParentBottom="true"
+            android:paddingBottom="16dp" />
 
         <FrameLayout
             android:id="@+id/top_fragment_container"
@@ -16,19 +27,9 @@
             android:layout_height="match_parent"
             android:gravity="center_horizontal">
 
-            <android.support.v4.view.ViewPager
-                android:id="@+id/viewPager"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
 
-            <com.facebook.login.widget.LoginButton
-                android:id="@+id/login_button"
-                android:layout_width="match_parent"
-                android:layout_height="42dp"
-                android:layout_gravity="bottom"
-                android:paddingBottom="16dp" />
         </FrameLayout>
-    </LinearLayout>
+    </RelativeLayout>
 
 
 </LinearLayout>

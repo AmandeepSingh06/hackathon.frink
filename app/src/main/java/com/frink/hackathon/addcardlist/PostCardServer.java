@@ -6,8 +6,9 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
+import com.frink.hackathon.FragmentConstant;
 import com.frink.hackathon.R;
-import com.frink.hackathon.fragments.FriendListFragment;
+import com.frink.hackathon.fragmentCallBack;
 import com.google.gson.Gson;
 
 import org.apache.http.HttpResponse;
@@ -74,7 +75,9 @@ public class PostCardServer extends AsyncTask<Void, Void, String> {
     protected void onPostExecute(String httpStatusCode) {
         progressDialogue.dismiss();
         Toast.makeText(context, R.string.message, Toast.LENGTH_LONG).show();
-        fragmentManager.beginTransaction().replace(R.id.top_fragment_container, FriendListFragment.getInstance(userid)).commit();
+
+        ((fragmentCallBack) context).transactionCallBack(FragmentConstant.FRIENDLIST_FRAGMENT, userid);
+        // fragmentManager.beginTransaction().replace(R.id.top_fragment_container, FriendListFragment.getInstance(userid)).commit();
 
     }
 

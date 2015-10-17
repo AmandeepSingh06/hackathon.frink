@@ -5,10 +5,12 @@
     android:gravity="center_horizontal"
     tools:context=".MainActivity">
 
+
     <AutoCompleteTextView
         android:id="@+id/autoComplete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:ems="15" />
+        android:ems="15"
+        android:hint="Enter the card name here.." />
 </RelativeLayout>

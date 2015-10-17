@@ -61,8 +61,7 @@ public class CardListAdapater extends ArrayAdapter<CardListModel.CardModel> {
 
         ImageView imageView = (ImageView) view.findViewById(R.id.imageview);
         TextView textView = (TextView) view.findViewById(R.id.coupan);
-        textView.setText(list.get(position).getTitle() + "\n" + list.get(position).getExpiry() + "\n" + list.get(position).getTerm_cond() + "\n" +
-                list.get(position).getCoupan_company());
+        textView.setText(list.get(position).getTitle() + "\n" + list.get(position).getExpiry() + "\n" + list.get(position).getCoupon_company());
         return view;
 
     }

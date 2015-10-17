@@ -59,7 +59,7 @@ public class FriendListFragment extends Fragment implements GetFriendsWithCardAs
         friendList = (ListView) baseView.findViewById(R.id.list_view);
         listAdapter = new FriendListAdapter(list, getActivity().getApplicationContext());
         friendList.setAdapter(listAdapter);
-        adapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), android.R.layout.simple_dropdown_item_1line, suggesstions);
+        adapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), R.layout.filter_friend_seed, suggesstions);
         autoComplete = (AutoCompleteTextView) baseView.findViewById(R.id.autoComplete);
         autoComplete.setAdapter(adapter);
         autoComplete.setThreshold(1);
@@ -165,7 +165,14 @@ public class FriendListFragment extends Fragment implements GetFriendsWithCardAs
     @Override
     public void onSuccess(FriendsList friendList) {
         progressDialogue.dismiss();
-        listAdapter.setList(friendList.getUsers());
+        if (friendList.getUsers().size() == 0) {
+            FriendsList.FriendName name = new FriendsList.FriendName();
+            name.setName("No Results Found");
+            friendList.getUsers().add(name);
+            listAdapter.setList(friendList.getUsers());
+        } else {
+            listAdapter.setList(friendList.getUsers());
+        }
         listAdapter.notifyDataSetChanged();
         task = null;
 
@@ -176,4 +183,6 @@ public class FriendListFragment extends Fragment implements GetFriendsWithCardAs
 
 
     }
+
+   
 }

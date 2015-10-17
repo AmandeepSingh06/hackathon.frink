@@ -9,9 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.frink.hackathon.FragmentConstant;
 import com.frink.hackathon.R;
-import com.frink.hackathon.addcardlist.BankCardFragment;
-import com.frink.hackathon.coupanlist.CardListFragment;
+import com.frink.hackathon.fragmentCallBack;
 import com.frink.hackathon.task.UserFirstTimeLogin;
 
 /**
@@ -59,7 +59,8 @@ public class LandingScreenFragment extends Fragment implements View.OnClickListe
 
                 break;
             case R.id.button2:
-                getFragmentManager().beginTransaction().replace(R.id.top_fragment_container, CardListFragment.getInstance(id)).commit();
+                ((fragmentCallBack) getActivity()).transactionCallBack(FragmentConstant.CARD_LIST_FRAGMENT, id);
+                //getFragmentManager().beginTransaction().replace(R.id.top_fragment_container, CardListFragment.getInstance(id)).addToBackStack("CardListFragment").commit();
 
                 break;
         }
@@ -67,12 +68,13 @@ public class LandingScreenFragment extends Fragment implements View.OnClickListe
 
     @Override
     public void onSuccess(boolean result) {
-        System.out.println("Result vhdfhvdiufhiu " + result);
         progressDialogue.dismiss();
         if (result) {
-            getFragmentManager().beginTransaction().replace(R.id.top_fragment_container, FriendListFragment.getInstance(id)).commit();
+            ((fragmentCallBack) getActivity()).transactionCallBack(FragmentConstant.FRIENDLIST_FRAGMENT, id);
+            //  getFragmentManager().beginTransaction().replace(R.id.top_fragment_container, FriendListFragment.getInstance(id)).addToBackStack("FriendListFragment").commit();
         } else {
-            getFragmentManager().beginTransaction().replace(R.id.top_fragment_container, BankCardFragment.getInstance(id)).commit();
+            ((fragmentCallBack) getActivity()).transactionCallBack(FragmentConstant.BANK_CARD_FRAGMENT, id);
+            // getFragmentManager().beginTransaction().replace(R.id.top_fragment_container, BankCardFragment.getInstance(id)).addToBackStack("BankCardFragment").commit();
         }
     }
 }

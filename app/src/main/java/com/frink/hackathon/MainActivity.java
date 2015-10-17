@@ -13,14 +13,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.frink.hackathon.addcardlist.BankCardFragment;
+import com.frink.hackathon.coupanlist.CardListFragment;
+import com.frink.hackathon.fragments.FriendListFragment;
 import com.frink.hackathon.fragments.LandingScreenFragment;
 import com.frink.hackathon.homescreen.ViewPagerAdapter;
 import com.frink.hackathon.models.UserFBData;
@@ -34,7 +39,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements GettingFriendListAsyncTask.GettingFriendListCallBack, SendingUserNAppDataAsyncTask.OnMessageSent {
+public class MainActivity extends AppCompatActivity implements GettingFriendListAsyncTask.GettingFriendListCallBack, SendingUserNAppDataAsyncTask.OnMessageSent, fragmentCallBack {
     private LoginButton loginButton;
     private CallbackManager callbackManager;
     private UserFBData fbUser;
@@ -69,6 +74,11 @@ public class MainActivity extends AppCompatActivity implements GettingFriendList
         viewPager.setCurrentItem(0);
         viewPager.setOffscreenPageLimit(2);
         adapter.notifyDataSetChanged();
+        if (AccessToken.getCurrentAccessToken() != null) {
+            LoginManager.getInstance().logOut();
+            //getFragmentManager().beginTransaction().add(R.id.top_fragment_container, LandingScreenFragment.getInstance(fbUser.getId())).commit();
+
+        }
         loginButton = (LoginButton) findViewById(R.id.login_button);
         loginButton.setReadPermissions(PERMISSIONS);
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -164,14 +174,38 @@ public class MainActivity extends AppCompatActivity implements GettingFriendList
         progressDialogue.dismiss();
         viewPager.setVisibility(View.GONE);
         loginButton.setVisibility(View.GONE);
-
-
-        getFragmentManager().beginTransaction().add(R.id.top_fragment_container, LandingScreenFragment.getInstance(fbUser.getId())).commit();
+        transactionCallBack(FragmentConstant.LANDIND_SCREEN_FRAGMENT, "" + 0);
     }
 
     @Override
     public void onSendFailure() {
 
+    }
+
+    @Override
+    public void transactionCallBack(int code, String id) {
+        switch (code) {
+            case FragmentConstant.LANDIND_SCREEN_FRAGMENT:
+                System.out.println("Count " + getFragmentManager().getBackStackEntryCount());
+                getFragmentManager().beginTransaction().add(R.id.top_fragment_container, LandingScreenFragment.getInstance(fbUser.getId())).addToBackStack("LandingScreenFragment").commit();
+                System.out.println("Count " + getFragmentManager().getBackStackEntryCount());
+                break;
+            case FragmentConstant.BANK_CARD_FRAGMENT:
+                System.out.println("Count " + getFragmentManager().getBackStackEntryCount());
+                getFragmentManager().beginTransaction().replace(R.id.top_fragment_container, BankCardFragment.getInstance(id)).addToBackStack("BankCardFragment").commit();
+                System.out.println("Count " + getFragmentManager().getBackStackEntryCount());
+                break;
+            case FragmentConstant.FRIENDLIST_FRAGMENT:
+                System.out.println("Count " + getFragmentManager().getBackStackEntryCount());
+                getFragmentManager().beginTransaction().replace(R.id.top_fragment_container, FriendListFragment.getInstance(id)).addToBackStack("FriendListFragment").commit();
+                System.out.println("Count " + getFragmentManager().getBackStackEntryCount());
+                break;
+            case FragmentConstant.CARD_LIST_FRAGMENT:
+                System.out.println("Count " + getFragmentManager().getBackStackEntryCount());
+                getFragmentManager().beginTransaction().replace(R.id.top_fragment_container, CardListFragment.getInstance(id)).addToBackStack("CardListFragment").commit();
+                System.out.println("Count " + getFragmentManager().getBackStackEntryCount());
+                break;
+        }
     }
 }
 
