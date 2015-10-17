@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.frink.hackathon.R;
+import com.frink.hackathon.models.FriendsList;
 
 import java.util.ArrayList;
 
@@ -16,17 +17,17 @@ import java.util.ArrayList;
  */
 public class FriendListAdapter extends BaseAdapter {
 
-    private ArrayList<String> list;
+    private ArrayList<FriendsList.FriendName> list;
     private Context context;
     private LayoutInflater inflater;
 
-    public FriendListAdapter(ArrayList<String> list, Context context) {
+    public FriendListAdapter(ArrayList<FriendsList.FriendName> list, Context context) {
         this.list = list;
         this.context = context;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    public void setList(ArrayList<String> list) {
+    public void setList(ArrayList<FriendsList.FriendName> list) {
         this.list = list;
     }
 
@@ -56,7 +57,7 @@ public class FriendListAdapter extends BaseAdapter {
         } else {
             holder = (Holder) convertView.getTag();
         }
-        holder.text.setText(list.get(position));
+        holder.text.setText(list.get(position).getName());
         return convertView;
     }
 

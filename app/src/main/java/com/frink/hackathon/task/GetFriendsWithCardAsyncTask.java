@@ -18,7 +18,7 @@ import java.net.URL;
  */
 
 
-public class GetFriendsWithCardAsyncTask extends AsyncTask<String, Void, InputStream> {
+public class GetFriendsWithCardAsyncTask extends AsyncTask<String, Void, FriendsList> {
 
     private GetFriendsWithCardCallBack callBack;
 
@@ -27,31 +27,35 @@ public class GetFriendsWithCardAsyncTask extends AsyncTask<String, Void, InputSt
     }
 
     @Override
-    protected InputStream doInBackground(String... parmas) {
-
+    protected FriendsList doInBackground(String... parmas) {
+        FriendsList friendsList = null;
         InputStream is = null;
         try {
             URL url = new URL(parmas[0]);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.connect();
             is = conn.getInputStream();
-
-
+            final Gson gson = new Gson();
+            final BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            friendsList = gson.fromJson(reader, FriendsList.class);
         } catch (MalformedURLException ex) {
             ex.printStackTrace();
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        return is;
+        return friendsList;
     }
 
     @Override
-    protected void onPostExecute(InputStream inputStream) {
+    protected void onPostExecute(FriendsList friendsList) {
+        System.out.println("onPost");
+        if (friendsList != null) {
+            if (callBack != null) {
+                callBack.onSuccess(friendsList);
+            } else {
 
-        final Gson gson = new Gson();
-        final BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-        if (reader != null) {
-            callBack.onSuccess((FriendsList) gson.fromJson(reader, FriendsList.class));
+                callBack.onFailure();
+            }
         } else {
             callBack.onFailure();
         }

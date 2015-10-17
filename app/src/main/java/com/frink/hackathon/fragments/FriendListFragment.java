@@ -31,7 +31,7 @@ public class FriendListFragment extends Fragment implements GetFriendsWithCardAs
     private String var = null;
     private GetFriendsWithCardAsyncTask task = null;
     private ListView friendList;
-    private ArrayList<String> list = new ArrayList<>();
+    private ArrayList<FriendsList.FriendName> list = new ArrayList<>();
     private FriendListAdapter listAdapter;
     private String id;
 
@@ -92,15 +92,12 @@ public class FriendListFragment extends Fragment implements GetFriendsWithCardAs
 
     private void callApi(String str) {
         String var = convert(str);
-        System.out.println("Var " + var);
-        System.out.println("id " + id);
-        System.out.println("URl " + "http://sushantr.housing.com:5555/friends?card=" + var + "&fb_id=" + id);
-        if (task != null && var != null && id != null) {
+        if (task == null && var != null && id != null) {
             task = new GetFriendsWithCardAsyncTask(this);
             task.execute(
-                    "http://sushantr.housing.com:5555/friends?card=" + var
-                            + "&fb_id=" + id);
+                    "http://khandeshb.housing.com:5678/friends?card=" + var + "&fb_id=" + id);
         }
+
 
     }
 
@@ -163,6 +160,7 @@ public class FriendListFragment extends Fragment implements GetFriendsWithCardAs
     public void onSuccess(FriendsList friendList) {
         listAdapter.setList(friendList.getUsers());
         listAdapter.notifyDataSetChanged();
+        task = null;
 
     }
 
