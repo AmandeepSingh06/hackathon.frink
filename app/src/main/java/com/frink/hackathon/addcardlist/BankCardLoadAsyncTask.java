@@ -23,17 +23,20 @@ import java.util.List;
 /**
  * Created by shashwatsinha on 17/10/15.
  */
-public class BankCardLoadAsyncTask extends AsyncTask<String, Void, BackCardTypeModel> implements AdapterView.OnItemClickListener {
+public class BankCardLoadAsyncTask extends AsyncTask<String, Void, BackCardTypeModel> {
 
     BackCardTypeModel backCardTypeModel;
     Spinner spinner;
     Context context;
     ListView listView;
+    int positionOfSpinner;
+    String userId;
 
-    BankCardLoadAsyncTask(Context context, ListView listView, Spinner spinner) {
+    BankCardLoadAsyncTask(Context context, ListView listView, Spinner spinner, String userId) {
         this.spinner = spinner;
         this.context = context;
         this.listView = listView;
+        this.userId = userId;
     }
 
     @Override
@@ -61,18 +64,22 @@ public class BankCardLoadAsyncTask extends AsyncTask<String, Void, BackCardTypeM
     @Override
     public void onPostExecute(BackCardTypeModel bankCardTypeModel) {
         if (bankCardTypeModel != null) {
+
             List<BackCardTypeModel.BankCards> bankCards = bankCardTypeModel.getChacha();
             ArrayList<String> list = new ArrayList<String>();
             final List<ArrayList<String>> list_cards = new ArrayList<ArrayList<String>>();
+            final List<ArrayList<Integer>> list_cards_id = new ArrayList<ArrayList<Integer>>();
             for (BackCardTypeModel.BankCards card : bankCards) {
                 list.add(card.getName());
                 list_cards.add(card.bankCards());
+                list_cards_id.add(card.bankCardIds());
             }
             spinner.setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, list));
 
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                    positionOfSpinner = i;
                     ArrayList<String> list = list_cards.get(i);
                     listView.setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_list_item_activated_1, list));
                 }
@@ -82,12 +89,16 @@ public class BankCardLoadAsyncTask extends AsyncTask<String, Void, BackCardTypeM
 
                 }
             });
+
+
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    new PostCardServer(context, userId, Integer.toString(list_cards_id.get(positionOfSpinner).get(i))).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                }
+            });
         }
-
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-    }
 }

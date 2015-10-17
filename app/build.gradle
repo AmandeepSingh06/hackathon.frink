@@ -4,6 +4,7 @@ android {
     compileSdkVersion 23
     buildToolsVersion "22.0.1"
 
+
     defaultConfig {
         applicationId "com.frink.hackathon"
         minSdkVersion 15
@@ -25,4 +26,6 @@ dependencies {
     compile 'com.facebook.android:facebook-android-sdk:4.0.0'
     compile 'com.google.code.gson:gson:2.3.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'org.jbundle.util.osgi.wrapped:org.jbundle.util.osgi.wrapped.org.apache.http.client:4.1.2'
+
 }

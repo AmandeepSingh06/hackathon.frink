@@ -29,6 +29,14 @@ public class BackCardTypeModel implements Serializable {
             }
             return list;
         }
+
+        ArrayList<Integer> bankCardIds() {
+            ArrayList<Integer> list = new ArrayList<Integer>();
+            for (Card name : value) {
+                list.add(name.getId());
+            }
+            return list;
+        }
     }
 
     public static class Card {
@@ -37,6 +45,10 @@ public class BackCardTypeModel implements Serializable {
 
         public String getCardName() {
             return name;
+        }
+
+        public int getId() {
+            return id;
         }
 
 

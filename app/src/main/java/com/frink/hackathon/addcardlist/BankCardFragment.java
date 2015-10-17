@@ -19,16 +19,23 @@ public class BankCardFragment extends Fragment {
     private Spinner bankListView;
     private ListView listView;
     String url = "http://vipulg.housing.com:3002/api/v0/list_card";
+    String userId;
 
 
-    public static BankCardFragment getInstance() {
+    public static BankCardFragment getInstance(String id) {
         BankCardFragment bankCardFragment = new BankCardFragment();
+        Bundle b = new Bundle();
+        b.putString("id", id);
+        bankCardFragment.setArguments(b);
         return bankCardFragment;
     }
 
     @Override
     public void onCreate(Bundle onSavedInstanceState) {
         super.onCreate(onSavedInstanceState);
+        if (getArguments() != null) {
+            userId = getArguments().getSerializable("id").toString();
+        }
     }
 
     @Override
@@ -42,6 +49,6 @@ public class BankCardFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle onSavedInstanceState) {
         super.onActivityCreated(onSavedInstanceState);
-        new BankCardLoadAsyncTask(getActivity(), listView, bankListView).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, url);
+        new BankCardLoadAsyncTask(getActivity(), listView, bankListView, userId).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, url);
     }
 }
