@@ -10,6 +10,7 @@ import android.widget.Button;
 
 import com.frink.hackathon.R;
 import com.frink.hackathon.addcardlist.BankCardFragment;
+import com.frink.hackathon.coupanlist.CardListFragment;
 import com.frink.hackathon.task.UserFirstTimeLogin;
 
 /**
@@ -52,7 +53,7 @@ public class LandingScreenFragment extends Fragment implements View.OnClickListe
 
                 break;
             case R.id.button2:
-                getFragmentManager().beginTransaction().replace(R.id.top_fragment_container, .getInstance(id)).commit();
+                getFragmentManager().beginTransaction().replace(R.id.top_fragment_container, CardListFragment.getInstance(id)).commit();
                 break;
         }
     }
