@@ -1,6 +1,7 @@
 package com.frink.hackathon.coupanlist;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,8 +61,14 @@ public class CardListAdapater extends ArrayAdapter<CardListModel.CardModel> {
         }
 
         ImageView imageView = (ImageView) view.findViewById(R.id.imageview);
-        TextView textView = (TextView) view.findViewById(R.id.coupan);
-        textView.setText(list.get(position).getTitle() + "\n" + list.get(position).getExpiry() + "\n" + list.get(position).getCoupon_company());
+
+        TextView textView = (TextView) view.findViewById(R.id.detail_coupan_text);
+        Log.d("shashwat", "Coupan title " + list.get(position).getTitle());
+        textView.setText(list.get(position).getTitle());
+
+        TextView textView1 = (TextView) view.findViewById(R.id.detail_coupan_date);
+        textView1.setText(list.get(position).getExpiry());
+        Log.d("shashwat", "Coupan date " + list.get(position).getExpiry());
         return view;
 
     }

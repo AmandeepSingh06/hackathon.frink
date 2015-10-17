@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +46,12 @@ public class FriendListFragment extends Fragment implements GetFriendsWithCardAs
         bundle.putString("id", id);
         cf.setArguments(bundle);
         return cf;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("shashwat", "getFragmentManager(). getBackStackEntery Vount " + getFragmentManager().getBackStackEntryCount());
     }
 
     @Override

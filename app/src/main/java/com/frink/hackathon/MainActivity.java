@@ -76,31 +76,35 @@ public class MainActivity extends AppCompatActivity implements GettingFriendList
         adapter.notifyDataSetChanged();
         if (AccessToken.getCurrentAccessToken() != null) {
             LoginManager.getInstance().logOut();
-            //getFragmentManager().beginTransaction().add(R.id.top_fragment_container, LandingScreenFragment.getInstance(fbUser.getId())).commit();
 
         }
+
         loginButton = (LoginButton) findViewById(R.id.login_button);
         loginButton.setReadPermissions(PERMISSIONS);
-        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                progressDialogue = new ProgressDialog(context);
-                progressDialogue.setTitle("Please Wait");
-                progressDialogue.setMessage("Data getting Loaded");
-                progressDialogue.show();
-                fetchDataFromFacebook(loginResult);
+        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>()
+
+                {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        progressDialogue = new ProgressDialog(context);
+                        progressDialogue.setTitle("Please Wait");
+                        progressDialogue.setMessage("Data getting Loaded");
+                        progressDialogue.show();
+                        fetchDataFromFacebook(loginResult);
 
 
-            }
+                    }
 
-            @Override
-            public void onCancel() {
-            }
+                    @Override
+                    public void onCancel() {
+                    }
 
-            @Override
-            public void onError(FacebookException e) {
-            }
-        });
+                    @Override
+                    public void onError(FacebookException e) {
+                    }
+                }
+
+        );
     }
 
     private void fetchDataFromFacebook(final LoginResult loginResult) {
@@ -174,6 +178,7 @@ public class MainActivity extends AppCompatActivity implements GettingFriendList
         progressDialogue.dismiss();
         viewPager.setVisibility(View.GONE);
         loginButton.setVisibility(View.GONE);
+
         transactionCallBack(FragmentConstant.LANDIND_SCREEN_FRAGMENT, "" + 0);
     }
 

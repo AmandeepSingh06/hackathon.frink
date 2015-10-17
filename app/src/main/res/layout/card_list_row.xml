@@ -12,18 +12,24 @@
         android:src="@mipmap/ic_launcher" />
 
     <LinearLayout
-        android:id="@+id/linearcoupanrow"
+
+        android:id="@+id/detail_coupan_view"
         android:layout_width="0dp"
         android:layout_height="100dp"
-        android:layout_weight="0.75"
-        android:orientation="vertical">
+        android:layout_weight="0.75">
+
 
         <TextView
-            android:id="@+id/coupan"
-            android:layout_width="0dp"
-            android:layout_height="100dp" />
+            android:id="@+id/detail_coupan_text"
+            android:layout_width="200dip"
+            android:layout_height="100dp"
+            android:layout_gravity="start"
+            android:ellipsize="end" />
 
+        <TextView
+            android:id="@+id/detail_coupan_date"
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+            android:layout_gravity="end" />
     </LinearLayout>
-
-
 </LinearLayout>

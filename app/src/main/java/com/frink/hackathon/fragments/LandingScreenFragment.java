@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +49,15 @@ public class LandingScreenFragment extends Fragment implements View.OnClickListe
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("shashwat", "getFragmentManager().getBackStackEntryCount() in LandingScreenFragment " + getFragmentManager().getBackStackEntryCount());
+        Log.d("shashwat", "LandingScreenFragment onResume" +
+                "");
+    }
+
+
+    @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.button1:
@@ -59,22 +69,33 @@ public class LandingScreenFragment extends Fragment implements View.OnClickListe
 
                 break;
             case R.id.button2:
+
                 ((fragmentCallBack) getActivity()).transactionCallBack(FragmentConstant.CARD_LIST_FRAGMENT, id);
-                //getFragmentManager().beginTransaction().replace(R.id.top_fragment_container, CardListFragment.getInstance(id)).addToBackStack("CardListFragment").commit();
+
 
                 break;
         }
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d("shashwat", "LandingScreenFragment onDestroy" +
+                "");
+    }
+
+    @Override
     public void onSuccess(boolean result) {
         progressDialogue.dismiss();
+        Log.d("shashwat", "getFragmentManager() LandingScreenFragment " + getFragmentManager());
         if (result) {
+
             ((fragmentCallBack) getActivity()).transactionCallBack(FragmentConstant.FRIENDLIST_FRAGMENT, id);
-            //  getFragmentManager().beginTransaction().replace(R.id.top_fragment_container, FriendListFragment.getInstance(id)).addToBackStack("FriendListFragment").commit();
+
         } else {
             ((fragmentCallBack) getActivity()).transactionCallBack(FragmentConstant.BANK_CARD_FRAGMENT, id);
-            // getFragmentManager().beginTransaction().replace(R.id.top_fragment_container, BankCardFragment.getInstance(id)).addToBackStack("BankCardFragment").commit();
+
+
         }
     }
 }
