@@ -17,7 +17,7 @@ import java.net.URL;
  */
 public class UserFirstTimeLogin extends AsyncTask<Void, Void, UserFirstTimeLogin.Results> {
 
-    private String base = "http://vipulg.housing.com:3002/";
+    private String base = "http://khandeshb.housing.com:5678/";
     private String post = "api/v0/get_card";
     private Callback callback;
     private String id;

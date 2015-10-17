@@ -25,7 +25,7 @@ public class PostCardServer extends AsyncTask<Void, Void, String> {
 
     private String userid;
     private String cardId;
-    private String base = "http://vipulg.housing.com:3002/";
+    private String base = "http://khandeshb.housing.com:5678/";
     private String post = "api/v0/post_card";
     private OnMessageSent callback;
     private Context context;

@@ -25,7 +25,7 @@ public class SendingUserNAppDataAsyncTask extends AsyncTask<Void, String, String
     private String mail;
     private ArrayList<String> apps;
     private ArrayList<FriendData> friends;
-    private String base = "http://vipulg.housing.com:3002/";
+    private String base = "http://khandeshb.housing.com:5678/";
     private String post = "api/v0/details";
     private OnMessageSent callback;
 

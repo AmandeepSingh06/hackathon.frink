@@ -16,7 +16,7 @@ public class BankCardFragment extends Activity {
 
     private Spinner bankListView;
     private ListView listView;
-    String url = "http://vipulg.housing.com:3002/api/v0/list_card";
+    String url = "http://khandeshb.housing.com:5678/api/v0/list_card";
     String userId;
 
 
