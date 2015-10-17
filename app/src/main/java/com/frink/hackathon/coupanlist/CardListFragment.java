@@ -107,7 +107,7 @@ public class CardListFragment extends ListFragment {
 
             while (ie.hasNext()) {
                 CardListModel.CardModel cm = ie.next();
-                Log.d("shashwat", cm.toString());
+
                 cardListAdapater.add(cm);
             }
             cardListAdapater.notifyDataSetChanged();

@@ -13,12 +13,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.frink.hackathon.fragments.LandingScreenFragment;
@@ -69,6 +71,10 @@ public class MainActivity extends AppCompatActivity implements GettingFriendList
         viewPager.setCurrentItem(0);
         viewPager.setOffscreenPageLimit(2);
         adapter.notifyDataSetChanged();
+        if (AccessToken.getCurrentAccessToken() != null) {
+            LoginManager.getInstance().logOut();
+        }
+
         loginButton = (LoginButton) findViewById(R.id.login_button);
         loginButton.setReadPermissions(PERMISSIONS);
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -165,8 +171,8 @@ public class MainActivity extends AppCompatActivity implements GettingFriendList
         viewPager.setVisibility(View.GONE);
         loginButton.setVisibility(View.GONE);
 
-
-        getFragmentManager().beginTransaction().add(R.id.top_fragment_container, LandingScreenFragment.getInstance(fbUser.getId())).commit();
+        Log.d("shashwat", "getFragmentManager() onSendSuccess() " + getFragmentManager());
+        getFragmentManager().beginTransaction().add(R.id.top_fragment_container, LandingScreenFragment.getInstance(fbUser.getId())).addToBackStack(null).commit();
     }
 
     @Override
