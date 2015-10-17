@@ -76,7 +76,6 @@ public class MainActivity extends AppCompatActivity implements GettingFriendList
             public void onSuccess(LoginResult loginResult) {
 
                 fetchDataFromFacebook(loginResult);
-                //
 
 
             }

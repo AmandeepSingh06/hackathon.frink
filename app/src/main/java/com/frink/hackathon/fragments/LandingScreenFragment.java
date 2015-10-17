@@ -1,6 +1,7 @@
 package com.frink.hackathon.fragments;
 
 import android.app.Fragment;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,11 +9,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.frink.hackathon.R;
+import com.frink.hackathon.addcardlist.BankCardFragment;
+import com.frink.hackathon.task.UserFirstTimeLogin;
 
 /**
  * Created by amandeepsingh on 17/10/15.
  */
-public class LandingScreenFragment extends Fragment implements View.OnClickListener {
+public class LandingScreenFragment extends Fragment implements View.OnClickListener, UserFirstTimeLogin.Callback {
     private String id;
     private Button button1, button2;
 
@@ -45,12 +48,22 @@ public class LandingScreenFragment extends Fragment implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.button1:
+                new UserFirstTimeLogin(this, id).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
-                getFragmentManager().beginTransaction().replace(R.id.top_fragment_container, FriendListFragment.getInstance(id)).commit();
                 break;
             case R.id.button2:
-                getFragmentManager().beginTransaction().replace(R.id.top_fragment_container, FriendListFragment.getInstance(id)).commit();
+                getFragmentManager().beginTransaction().replace(R.id.top_fragment_container, .getInstance(id)).commit();
                 break;
+        }
+    }
+
+    @Override
+    public void onSuccess(boolean result) {
+        System.out.println("Result vhdfhvdiufhiu " + result);
+        if (result) {
+            getFragmentManager().beginTransaction().replace(R.id.top_fragment_container, FriendListFragment.getInstance(id)).commit();
+        } else {
+            getFragmentManager().beginTransaction().replace(R.id.top_fragment_container, BankCardFragment.getInstance(id)).commit();
         }
     }
 }
