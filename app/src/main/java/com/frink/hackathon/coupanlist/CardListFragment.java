@@ -30,7 +30,7 @@ public class CardListFragment extends Activity {
 
     public LinkedList<CardListModel.CardModel> items = new LinkedList<CardListModel.CardModel>();
     CardListAdapater cl;
-    CardListModel.CardModel cm = new CardListModel.CardModel(null, null, null, null);
+    CardListModel.CardModel cm = new CardListModel.CardModel(null, null, null, null, null, null);
     String userId;
     ListView listView;
 

@@ -19,35 +19,40 @@ import java.util.List;
 public class CardListAdapater extends ArrayAdapter<CardListModel.CardModel> {
 
     List<CardListModel.CardModel> list;
+    private Context context;
     int[] drawables = new int[]{R.drawable.icon_one, R.drawable.icon_two, R.drawable.icon_three, R.drawable.icon_four};
 
     public CardListAdapater(Context context, int resource) {
         super(context, resource);
+        this.context = context;
     }
 
     public CardListAdapater(Context context, int resource, int textViewResourceId) {
         super(context, resource, textViewResourceId);
+        this.context = context;
     }
 
     public CardListAdapater(Context context, int resource, CardListModel.CardModel[] objects) {
         super(context, resource, objects);
-
+        this.context = context;
     }
 
     public CardListAdapater(Context context, int resource, int textViewResourceId, CardListModel.CardModel[] objects) {
         super(context, resource, textViewResourceId, objects);
-
+        this.context = context;
     }
 
     public CardListAdapater(Context context, int resource, List<CardListModel.CardModel> objects) {
         super(context, resource, objects);
         list = objects;
+        this.context = context;
 
     }
 
     public CardListAdapater(Context context, int resource, int textViewResourceId, List<CardListModel.CardModel> objects) {
         super(context, resource, textViewResourceId, objects);
         list = objects;
+        this.context = context;
 
     }
 
@@ -61,6 +66,11 @@ public class CardListAdapater extends ArrayAdapter<CardListModel.CardModel> {
             view = (View) layoutInflater.inflate(R.layout.card_list_row, parent, false);
         }
 
+        ImageView personImage = (ImageView) view.findViewById(R.id.person_image);
+        TextView name = (TextView) view.findViewById(R.id.name);
+        name.setText(list.get(position).getNamePerson());
+        Log.v("Image Url ", list.get(position).getPersonImage());
+        //Picasso.with(context).load(list.get(position).getPersonImage()).into(personImage);
         ImageView imageView = (ImageView) view.findViewById(R.id.imageview);
         int index = position % 4;
         imageView.setImageDrawable(getContext().getResources().getDrawable(drawables[index]));

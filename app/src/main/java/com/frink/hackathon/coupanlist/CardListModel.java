@@ -20,13 +20,17 @@ public class CardListModel implements Serializable {
         String expiry;
         String term_cond;
         String coupon_company;
+        private String name_person;
+        private String person_image;
+        
 
-
-        public CardModel(String title, String expiry, String term_cond, String coupan_company) {
+        public CardModel(String title, String expiry, String term_cond, String coupan_company, String name_person, String person_image) {
             this.title = title;
             this.expiry = expiry;
             this.term_cond = term_cond;
             this.coupon_company = coupan_company;
+            this.name_person = name_person;
+            this.person_image = person_image;
         }
 
         @Override
@@ -50,6 +54,14 @@ public class CardListModel implements Serializable {
 
         String getCoupon_company() {
             return coupon_company;
+        }
+
+        public String getNamePerson() {
+            return name_person;
+        }
+
+        public String getPersonImage() {
+            return person_image;
         }
     }
 }
