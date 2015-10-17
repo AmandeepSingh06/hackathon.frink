@@ -1,6 +1,7 @@
 package com.frink.hackathon.fragments;
 
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.widget.Button;
 
 import com.frink.hackathon.R;
 import com.frink.hackathon.addcardlist.BankCardFragment;
+import com.frink.hackathon.coupanlist.CardListFragment;
 import com.frink.hackathon.task.UserFirstTimeLogin;
 
 /**
@@ -18,6 +20,7 @@ import com.frink.hackathon.task.UserFirstTimeLogin;
 public class LandingScreenFragment extends Fragment implements View.OnClickListener, UserFirstTimeLogin.Callback {
     private String id;
     private Button button1, button2;
+    private ProgressDialog progressDialogue;
 
     static public LandingScreenFragment getInstance(String id) {
         LandingScreenFragment cf = new LandingScreenFragment();
@@ -48,11 +51,15 @@ public class LandingScreenFragment extends Fragment implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.button1:
+                progressDialogue = new ProgressDialog(getActivity());
+                progressDialogue.setTitle("Please Wait");
+                progressDialogue.setMessage("Data getting Loaded");
+                progressDialogue.show();
                 new UserFirstTimeLogin(this, id).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
                 break;
             case R.id.button2:
-                getFragmentManager().beginTransaction().replace(R.id.top_fragment_container, .getInstance(id)).commit();
+                getFragmentManager().beginTransaction().replace(R.id.top_fragment_container, CardListFragment.getInstance()).commit();
                 break;
         }
     }
@@ -60,6 +67,7 @@ public class LandingScreenFragment extends Fragment implements View.OnClickListe
     @Override
     public void onSuccess(boolean result) {
         System.out.println("Result vhdfhvdiufhiu " + result);
+        progressDialogue.dismiss();
         if (result) {
             getFragmentManager().beginTransaction().replace(R.id.top_fragment_container, FriendListFragment.getInstance(id)).commit();
         } else {

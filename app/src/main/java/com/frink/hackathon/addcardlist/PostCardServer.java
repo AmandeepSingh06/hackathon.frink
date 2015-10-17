@@ -1,10 +1,13 @@
 package com.frink.hackathon.addcardlist;
 
+import android.app.FragmentManager;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
 import com.frink.hackathon.R;
+import com.frink.hackathon.fragments.FriendListFragment;
 import com.google.gson.Gson;
 
 import org.apache.http.HttpResponse;
@@ -25,11 +28,22 @@ public class PostCardServer extends AsyncTask<Void, Void, String> {
     private String post = "api/v0/post_card";
     private OnMessageSent callback;
     private Context context;
+    private ProgressDialog progressDialogue;
+    private FragmentManager fragmentManager;
 
-    public PostCardServer(Context context, String userid, String cardId) {
+    public PostCardServer(Context context, String userid, String cardId, FragmentManager fragmentManager) {
         this.context = context;
         this.userid = userid;
         this.cardId = cardId;
+        this.fragmentManager = fragmentManager;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        progressDialogue = new ProgressDialog(context);
+        progressDialogue.setTitle("Please Wait");
+        progressDialogue.setMessage("Data getting Loaded");
+        progressDialogue.show();
     }
 
     @Override
@@ -58,7 +72,10 @@ public class PostCardServer extends AsyncTask<Void, Void, String> {
 
     @Override
     protected void onPostExecute(String httpStatusCode) {
+        progressDialogue.dismiss();
         Toast.makeText(context, R.string.message, Toast.LENGTH_LONG).show();
+        fragmentManager.beginTransaction().replace(R.id.top_fragment_container, FriendListFragment.getInstance(userid)).commit();
+
     }
 
 

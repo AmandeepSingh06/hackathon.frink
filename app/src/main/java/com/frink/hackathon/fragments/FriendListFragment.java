@@ -1,6 +1,7 @@
 package com.frink.hackathon.fragments;
 
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -34,6 +35,7 @@ public class FriendListFragment extends Fragment implements GetFriendsWithCardAs
     private ArrayList<FriendsList.FriendName> list = new ArrayList<>();
     private FriendListAdapter listAdapter;
     private String id;
+    private ProgressDialog progressDialogue;
 
 
     static public FriendListFragment getInstance(String id) {
@@ -57,7 +59,7 @@ public class FriendListFragment extends Fragment implements GetFriendsWithCardAs
         friendList = (ListView) baseView.findViewById(R.id.list_view);
         listAdapter = new FriendListAdapter(list, getActivity().getApplicationContext());
         friendList.setAdapter(listAdapter);
-        adapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, suggesstions);
+        adapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), android.R.layout.simple_dropdown_item_1line, suggesstions);
         autoComplete = (AutoCompleteTextView) baseView.findViewById(R.id.autoComplete);
         autoComplete.setAdapter(adapter);
         autoComplete.setThreshold(1);
@@ -93,6 +95,10 @@ public class FriendListFragment extends Fragment implements GetFriendsWithCardAs
     private void callApi(String str) {
         String var = convert(str);
         if (task == null && var != null && id != null) {
+            progressDialogue = new ProgressDialog(getActivity());
+            progressDialogue.setTitle("Please Wait");
+            progressDialogue.setMessage("Data getting Loaded");
+            progressDialogue.show();
             task = new GetFriendsWithCardAsyncTask(this);
             task.execute(
                     "http://khandeshb.housing.com:5678/friends?card=" + var + "&fb_id=" + id);
@@ -158,6 +164,7 @@ public class FriendListFragment extends Fragment implements GetFriendsWithCardAs
 
     @Override
     public void onSuccess(FriendsList friendList) {
+        progressDialogue.dismiss();
         listAdapter.setList(friendList.getUsers());
         listAdapter.notifyDataSetChanged();
         task = null;
@@ -166,6 +173,7 @@ public class FriendListFragment extends Fragment implements GetFriendsWithCardAs
 
     @Override
     public void onFailure() {
+
 
     }
 }

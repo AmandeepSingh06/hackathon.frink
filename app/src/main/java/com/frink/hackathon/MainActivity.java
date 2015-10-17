@@ -1,5 +1,7 @@
 package com.frink.hackathon;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -10,7 +12,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements GettingFriendList
     private ViewPager viewPager;
     private ViewPagerAdapter adapter;
     private Button button1, button2, button3;
-    private LinearLayout footer;
+    private ProgressDialog progressDialogue;
     // private FrameLayout frameLayoutFragmentContainer;
 
     public static final String FACEBOOK_PERMISSION_PUBLIC_PROFILE = "public_profile";
@@ -54,10 +55,11 @@ public class MainActivity extends AppCompatActivity implements GettingFriendList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        final Context context = this;
         FacebookSdk.sdkInitialize(getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
         setContentView(R.layout.activity_main);
-        footer = (LinearLayout) findViewById(R.id.footer);
+
         frameLayoutFragmentContainer = (FrameLayout) findViewById(R.id.top_fragment_container);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         adapter = new ViewPagerAdapter(getApplicationContext());
@@ -67,14 +69,15 @@ public class MainActivity extends AppCompatActivity implements GettingFriendList
         viewPager.setCurrentItem(0);
         viewPager.setOffscreenPageLimit(2);
         adapter.notifyDataSetChanged();
-
-
         loginButton = (LoginButton) findViewById(R.id.login_button);
         loginButton.setReadPermissions(PERMISSIONS);
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-
+                progressDialogue = new ProgressDialog(context);
+                progressDialogue.setTitle("Please Wait");
+                progressDialogue.setMessage("Data getting Loaded");
+                progressDialogue.show();
                 fetchDataFromFacebook(loginResult);
 
 
@@ -115,7 +118,10 @@ public class MainActivity extends AppCompatActivity implements GettingFriendList
 
     }
 
+
     public void getFacebookFriendList(String id, String accessToken) {
+        //progressDialogue = new ProgressDialog(this);
+
         GettingFriendListAsyncTask task = new GettingFriendListAsyncTask(UserFBFriendList.class, this);
         task.execute(getFacebookFriendListUrl(id, accessToken));
     }
@@ -155,10 +161,9 @@ public class MainActivity extends AppCompatActivity implements GettingFriendList
 
     @Override
     public void onSendSuccess() {
-
+        progressDialogue.dismiss();
         viewPager.setVisibility(View.GONE);
         loginButton.setVisibility(View.GONE);
-        footer.setVisibility(View.GONE);
 
 
         getFragmentManager().beginTransaction().add(R.id.top_fragment_container, LandingScreenFragment.getInstance(fbUser.getId())).commit();

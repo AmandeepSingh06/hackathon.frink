@@ -31,18 +31,14 @@ public class ViewPagerAdapter extends PagerAdapter {
                 .inflate(R.layout.view_pager_layout, container, false);
         int imageId;
         if (position == 0) {
-            imageId = R.color.alto;
-            //imageId = R.drawable.com_facebook_button_background;
+            imageId = R.drawable.one;
         } else if (position == 1) {
-            imageId = R.color.alabaster;
-            //imageId = R.drawable.com_facebook_button_send_icon;
+            imageId = R.drawable.two;
         } else {
-            imageId = R.color.back_green;
-            //imageId = R.drawable.com_facebook_button_icon;
+            imageId = R.drawable.three;
         }
-        //((ImageView) customView.findViewById(R.id.image)).setImageDrawable(context.getResources().getDrawable(imageId));
         Holder holder = new Holder(customView);
-        holder.image.setBackgroundColor(context.getResources().getColor(imageId));
+        holder.image.setImageDrawable(context.getResources().getDrawable(imageId));
         container.addView(customView);
         return customView;
     }

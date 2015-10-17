@@ -1,5 +1,7 @@
 package com.frink.hackathon.addcardlist;
 
+import android.app.FragmentManager;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.view.View;
@@ -31,12 +33,23 @@ public class BankCardLoadAsyncTask extends AsyncTask<String, Void, BackCardTypeM
     ListView listView;
     int positionOfSpinner;
     String userId;
+    ProgressDialog progressDialogue;
+    FragmentManager fragmentManager;
 
-    BankCardLoadAsyncTask(Context context, ListView listView, Spinner spinner, String userId) {
+    BankCardLoadAsyncTask(Context context, ListView listView, Spinner spinner, String userId, FragmentManager fragmentManager) {
         this.spinner = spinner;
         this.context = context;
         this.listView = listView;
         this.userId = userId;
+        this.fragmentManager = fragmentManager;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        progressDialogue = new ProgressDialog(context);
+        progressDialogue.setTitle("Please Wait");
+        progressDialogue.setMessage("Data getting Loaded");
+        progressDialogue.show();
     }
 
     @Override
@@ -63,6 +76,7 @@ public class BankCardLoadAsyncTask extends AsyncTask<String, Void, BackCardTypeM
 
     @Override
     public void onPostExecute(BackCardTypeModel bankCardTypeModel) {
+        progressDialogue.dismiss();
         if (bankCardTypeModel != null) {
 
             List<BackCardTypeModel.BankCards> bankCards = bankCardTypeModel.getChacha();
@@ -94,7 +108,8 @@ public class BankCardLoadAsyncTask extends AsyncTask<String, Void, BackCardTypeM
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    new PostCardServer(context, userId, Integer.toString(list_cards_id.get(positionOfSpinner).get(i))).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                    progressDialogue.dismiss();
+                    new PostCardServer(context, userId, Integer.toString(list_cards_id.get(positionOfSpinner).get(i)), fragmentManager).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 }
             });
         }

@@ -49,6 +49,7 @@ public class BankCardFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle onSavedInstanceState) {
         super.onActivityCreated(onSavedInstanceState);
-        new BankCardLoadAsyncTask(getActivity(), listView, bankListView, userId).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, url);
+
+        new BankCardLoadAsyncTask(getActivity(), listView, bankListView, userId, getFragmentManager()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, url);
     }
 }
