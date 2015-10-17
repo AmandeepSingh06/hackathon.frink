@@ -59,7 +59,8 @@ public class LandingScreenFragment extends Fragment implements View.OnClickListe
 
                 break;
             case R.id.button2:
-                getFragmentManager().beginTransaction().replace(R.id.top_fragment_container, CardListFragment.getInstance()).commit();
+                getFragmentManager().beginTransaction().replace(R.id.top_fragment_container, CardListFragment.getInstance(id)).commit();
+
                 break;
         }
     }

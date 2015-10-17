@@ -1,57 +1,54 @@
 package com.frink.hackathon.coupanlist;
 
 import java.io.Serializable;
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 /**
  * Created by shashwatsinha on 16/10/15.
  */
 public class CardListModel implements Serializable {
 
-    String name;
-    String image_url;
+    ArrayList<CardModel> coupons;
 
-
-    @Override
-    public String toString() {
-        String str = "";
-        str = " " + name + " " + image_url + "\n";
-        return str;
+    public ArrayList<CardModel> getCoupans() {
+        return coupons;
     }
 
-    public String getImage_url() {
-        return image_url;
-    }
 
-    public String getName() {
-        return name;
-    }
+    public static class CardModel {
+        String title;
+        String expiry;
+        String term_cond;
+        String coupan_company;
 
-    public CardListModel(String name ,String image_url){
-        this.name = name;
-        this.image_url = image_url;
-    }
-
-    /**
-     * Created by shashwatsinha on 16/10/15.
-     */
-    public static class CardListModelList implements Serializable {
-        public LinkedList<CardListModel> cards;
+        public CardModel(String title, String expiry, String term_cond, String coupan_company) {
+            this.title = title;
+            this.expiry = expiry;
+            this.term_cond = term_cond;
+            this.coupan_company = coupan_company;
+        }
 
         @Override
         public String toString() {
-            String str = "";
-            Iterator<CardListModel> ie = cards.iterator();
-            while (ie.hasNext()) {
-                CardListModel cl = ie.next();
-                str += cl.toString();
-            }
-            return str;
+            String string = title + expiry + term_cond + coupan_company;
+
+            return string;
         }
 
-        public LinkedList<CardListModel> getCards() {
-            return cards;
+        String getTitle() {
+            return title;
+        }
+
+        String getExpiry() {
+            return expiry;
+        }
+
+        String getTerm_cond() {
+            return term_cond;
+        }
+
+        String getCoupan_company() {
+            return coupan_company;
         }
     }
 }

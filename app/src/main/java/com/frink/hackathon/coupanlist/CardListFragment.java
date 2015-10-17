@@ -3,6 +3,7 @@ package com.frink.hackathon.coupanlist;
 import android.app.ListFragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.frink.hackathon.R;
 import com.google.gson.Gson;
@@ -14,6 +15,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -22,12 +24,16 @@ import java.util.LinkedList;
  */
 public class CardListFragment extends ListFragment {
 
-    public LinkedList<CardListModel> items = new LinkedList<CardListModel>();
+    public LinkedList<CardListModel.CardModel> items = new LinkedList<CardListModel.CardModel>();
     CardListAdapater cl;
-    CardListModel cm = new CardListModel("placeholder", null);
+    CardListModel.CardModel cm = new CardListModel.CardModel(null, null, null, null);
+    String userId;
 
-    static public CardListFragment getInstance() {
+    static public CardListFragment getInstance(String id) {
         CardListFragment cf = new CardListFragment();
+        Bundle b = new Bundle();
+        b.putString("id", id);
+        cf.setArguments(b);
         return cf;
     }
 
@@ -38,7 +44,15 @@ public class CardListFragment extends ListFragment {
         cl = new CardListAdapater(getActivity(), R.layout.card_list_row, items);
         JsonTask task = new JsonTask(cl);
         int i = 0;
-        task.execute("http://vipulg.housing.com:3002/Cards/get_all_available_cards");
+        if (getArguments() != null) {
+            userId = getArguments().getSerializable("id").toString();
+        }
+        String userid = "http://khandeshb.housing.com:5678/api/v0/get_coupons_of_friends?fb_id=";
+        userid += userId;
+        //userid += "912790462141979";
+        Log.d("shashwat", "userid is " + userid);
+        task.execute(userid);
+
     }
 
     @Override
@@ -50,7 +64,7 @@ public class CardListFragment extends ListFragment {
     /**
      * Created by shashwatsinha on 16/10/15.
      */
-    public static class JsonTask extends AsyncTask<String, Void, CardListModel.CardListModelList> {
+    public static class JsonTask extends AsyncTask<String, Void, CardListModel> {
 
         CardListAdapater cardListAdapater;
 
@@ -61,9 +75,10 @@ public class CardListFragment extends ListFragment {
 
 
         @Override
-        protected CardListModel.CardListModelList doInBackground(String... parmas) {
+        protected CardListModel doInBackground(String... parmas) {
 
-            CardListModel.CardListModelList cl = null;
+
+            CardListModel cl = null;
             InputStream is;
             try {
                 URL url = new URL(parmas[0]);
@@ -73,7 +88,7 @@ public class CardListFragment extends ListFragment {
                 final BufferedReader reader = new BufferedReader(new InputStreamReader(is));
                 String str;
                 final Gson gson = new Gson();
-                cl = gson.fromJson(reader, CardListModel.CardListModelList.class);
+                cl = gson.fromJson(reader, CardListModel.class);
                 return cl;
 
             } catch (MalformedURLException ex) {
@@ -85,14 +100,17 @@ public class CardListFragment extends ListFragment {
         }
 
         @Override
-        public void onPostExecute(CardListModel.CardListModelList cl) {
-            LinkedList<CardListModel> cards = cl.getCards();
-            Iterator<CardListModel> ie = cards.iterator();
+        public void onPostExecute(CardListModel cl) {
+
+            ArrayList<CardListModel.CardModel> cards = cl.getCoupans();
+            Iterator<CardListModel.CardModel> ie = cards.iterator();
+
             while (ie.hasNext()) {
-                CardListModel cm = ie.next();
+                CardListModel.CardModel cm = ie.next();
+                Log.d("shashwat", cm.toString());
                 cardListAdapater.add(cm);
-                cardListAdapater.notifyDataSetChanged();
             }
+            cardListAdapater.notifyDataSetChanged();
 
         }
 
