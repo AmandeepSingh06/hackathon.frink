@@ -21,6 +21,7 @@ public class CardListModel implements Serializable {
         String term_cond;
         String coupon_company;
 
+
         public CardModel(String title, String expiry, String term_cond, String coupan_company) {
             this.title = title;
             this.expiry = expiry;

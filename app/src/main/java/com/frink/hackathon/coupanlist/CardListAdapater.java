@@ -19,6 +19,7 @@ import java.util.List;
 public class CardListAdapater extends ArrayAdapter<CardListModel.CardModel> {
 
     List<CardListModel.CardModel> list;
+    int[] drawables = new int[]{R.drawable.icon_one, R.drawable.icon_two, R.drawable.icon_three, R.drawable.icon_four};
 
     public CardListAdapater(Context context, int resource) {
         super(context, resource);
@@ -61,7 +62,8 @@ public class CardListAdapater extends ArrayAdapter<CardListModel.CardModel> {
         }
 
         ImageView imageView = (ImageView) view.findViewById(R.id.imageview);
-
+        int index = position % 4;
+        imageView.setImageDrawable(getContext().getResources().getDrawable(drawables[index]));
         TextView textView = (TextView) view.findViewById(R.id.detail_coupan_text);
         Log.d("shashwat", "Coupan title " + list.get(position).getTitle());
         textView.setText(list.get(position).getTitle());

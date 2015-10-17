@@ -1,14 +1,13 @@
 package com.frink.hackathon.fragments;
 
-import android.app.Fragment;
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -25,7 +24,7 @@ import java.util.ArrayList;
 /**
  * Created by amandeepsingh on 17/10/15.
  */
-public class FriendListFragment extends Fragment implements GetFriendsWithCardAsyncTask.GetFriendsWithCardCallBack {
+public class FriendListFragment extends Activity implements GetFriendsWithCardAsyncTask.GetFriendsWithCardCallBack {
 
     private AutoCompleteTextView autoComplete;
     private ArrayAdapter<String> adapter;
@@ -39,15 +38,15 @@ public class FriendListFragment extends Fragment implements GetFriendsWithCardAs
     private ProgressDialog progressDialogue;
 
 
-    static public FriendListFragment getInstance(String id) {
-        FriendListFragment cf = new FriendListFragment();
+    /* static public FriendListFragment getInstance(String id) {
+         FriendListFragment cf = new FriendListFragment();
 
-        Bundle bundle = new Bundle();
-        bundle.putString("id", id);
-        cf.setArguments(bundle);
-        return cf;
-    }
-
+         Bundle bundle = new Bundle();
+         bundle.putString("id", id);
+         cf.setArguments(bundle);
+         return cf;
+     }
+ */
     @Override
     public void onResume() {
         super.onResume();
@@ -55,19 +54,18 @@ public class FriendListFragment extends Fragment implements GetFriendsWithCardAs
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View baseView = inflater
-                .inflate(R.layout.friend_list_fragment, container, false);
-        if (getArguments() != null) {
-            id = getArguments().getSerializable("id").toString();
-        }
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.friend_list_fragment);
+
+        Intent intent = getIntent();
+        id = intent.getStringExtra("id");
         setSeugesstionText();
-        friendList = (ListView) baseView.findViewById(R.id.list_view);
-        listAdapter = new FriendListAdapter(list, getActivity().getApplicationContext());
+        friendList = (ListView) findViewById(R.id.list_view);
+        listAdapter = new FriendListAdapter(list, this);
         friendList.setAdapter(listAdapter);
-        adapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), R.layout.filter_friend_seed, suggesstions);
-        autoComplete = (AutoCompleteTextView) baseView.findViewById(R.id.autoComplete);
+        adapter = new ArrayAdapter<String>(this, R.layout.filter_friend_seed, suggesstions);
+        autoComplete = (AutoCompleteTextView) findViewById(R.id.autoComplete);
         autoComplete.setAdapter(adapter);
         autoComplete.setThreshold(1);
 
@@ -96,13 +94,12 @@ public class FriendListFragment extends Fragment implements GetFriendsWithCardAs
         });
 
 
-        return baseView;
     }
 
     private void callApi(String str) {
         String var = convert(str);
         if (task == null && var != null && id != null) {
-            progressDialogue = new ProgressDialog(getActivity());
+            progressDialogue = new ProgressDialog(this);
             progressDialogue.setTitle("Please Wait");
             progressDialogue.setMessage("Data getting Loaded");
             progressDialogue.show();
@@ -191,5 +188,5 @@ public class FriendListFragment extends Fragment implements GetFriendsWithCardAs
 
     }
 
-   
+
 }

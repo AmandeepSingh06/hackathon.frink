@@ -3,12 +3,12 @@ package com.frink.hackathon.addcardlist;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
-import com.frink.hackathon.FragmentConstant;
 import com.frink.hackathon.R;
-import com.frink.hackathon.fragmentCallBack;
+import com.frink.hackathon.fragments.FriendListFragment;
 import com.google.gson.Gson;
 
 import org.apache.http.HttpResponse;
@@ -75,8 +75,10 @@ public class PostCardServer extends AsyncTask<Void, Void, String> {
     protected void onPostExecute(String httpStatusCode) {
         progressDialogue.dismiss();
         Toast.makeText(context, R.string.message, Toast.LENGTH_LONG).show();
-
-        ((fragmentCallBack) context).transactionCallBack(FragmentConstant.FRIENDLIST_FRAGMENT, userid);
+        Intent intent = new Intent(context, FriendListFragment.class);
+        intent.putExtra("id", userid);
+        context.startActivity(intent);
+        //  ((fragmentCallBack) context).transactionCallBack(FragmentConstant.FRIENDLIST_FRAGMENT, userid);
         // fragmentManager.beginTransaction().replace(R.id.top_fragment_container, FriendListFragment.getInstance(userid)).commit();
 
     }

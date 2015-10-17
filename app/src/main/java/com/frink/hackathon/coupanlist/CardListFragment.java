@@ -1,11 +1,13 @@
 package com.frink.hackathon.coupanlist;
 
-import android.app.ListFragment;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ListView;
 
 import com.frink.hackathon.R;
 import com.google.gson.Gson;
@@ -24,33 +26,31 @@ import java.util.LinkedList;
 /**
  * Created by shashwatsinha on 16/10/15.
  */
-public class CardListFragment extends ListFragment {
+public class CardListFragment extends Activity {
 
     public LinkedList<CardListModel.CardModel> items = new LinkedList<CardListModel.CardModel>();
     CardListAdapater cl;
     CardListModel.CardModel cm = new CardListModel.CardModel(null, null, null, null);
     String userId;
+    ListView listView;
 
-
-    static public CardListFragment getInstance(String id) {
-        CardListFragment cf = new CardListFragment();
-        Bundle b = new Bundle();
-        b.putString("id", id);
-        cf.setArguments(b);
-        return cf;
-    }
 
     @Override
     public void onCreate(Bundle onSaveInstance) {
         super.onCreate(onSaveInstance);
+        setContentView(R.layout.card_list_view);
 
-        cl = new CardListAdapater(getActivity(), R.layout.card_list_row, items);
+        Intent intent = getIntent();
+        userId = intent.getStringExtra("id");
 
-        JsonTask task = new JsonTask(getActivity(), cl);
-        int i = 0;
-        if (getArguments() != null) {
-            userId = getArguments().getSerializable("id").toString();
-        }
+        listView = (ListView) findViewById(R.id.list_view);
+
+
+        cl = new CardListAdapater(this, R.layout.card_list_row, items);
+        listView.setAdapter(cl);
+        JsonTask task = new JsonTask(this, cl);
+
+
         String userid = "http://khandeshb.housing.com:5678/api/v0/get_coupons_of_friends?fb_id=";
         userid += userId;
         //userid += "912790462141979";
@@ -60,11 +60,6 @@ public class CardListFragment extends ListFragment {
 
     }
 
-    @Override
-    public void onActivityCreated(Bundle onSavedInstance) {
-        super.onActivityCreated(onSavedInstance);
-        setListAdapter(cl);
-    }
 
     /**
      * Created by shashwatsinha on 16/10/15.
